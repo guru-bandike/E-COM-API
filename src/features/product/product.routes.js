@@ -9,8 +9,8 @@ const productController = new ProductController();
 
 // Define product routes
 productRouter.get('/', productController.getAllProducts); // Route to get all produts
-productRouter.get('/:id', productController.getProduct); // Route to get one specified product 
 productRouter.get('/filter', productController.filterProducts); // Route to filter products
+productRouter.get('/:id', productController.getProduct); // Route to get one specified product 
 productRouter.post('/', uploadFile.single('image'), productController.addProduct); // Route to new add product
 productRouter.put('/:id', uploadFile.single('image'), productController.updateProduct) // Route to update existing product
 productRouter.delete('/:id', productController.deleteProduct) // Route to delete existing product

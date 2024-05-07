@@ -11,7 +11,7 @@ export default class ProductController {
   // Method to serve only one specified product
   getProduct(req, res) {
     const productId = req.params.id; // Extract product id from request parameters
-    const foundProduct = ProductModel.get(productId); // Ge product from product module
+    const foundProduct = ProductModel.get(productId); // Get product from product module
 
     res.status(200).send(foundProduct); // Serve requested product
   }
@@ -95,7 +95,7 @@ export default class ProductController {
     // Create response object
     const response = {
       message: 'The filteration of product has been successfully completed!',
-      deletedProduct,
+      filteredProducts
     };
 
     res.status(200).send(response); // Send the response to the client

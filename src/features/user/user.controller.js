@@ -1,4 +1,5 @@
 import UserModel from './user.model.js';
+import generateToken from './helpers/tokenGenerator.helper.js';
 
 // Define User Controller and export as default
 export default class UserController {
@@ -18,14 +19,16 @@ export default class UserController {
 
   // Handle user signin request
   signIn(req, res) {
-    const {email, password} = req.body; // Extract user credentials from request body
+    const { email, password } = req.body; // Extract user credentials from request body
 
     const foundUser = UserModel.signIn(email, password);
 
-    if(!foundUser) {
-      return res.status(400).send('Invalid User Credentials!')
+    if (!foundUser) {
+      return res.status(400).send('Invalid User Credentials!');
     }
 
-    res.status(200).send('User signed in successfully!');
+    const token = generateToken(foundUser);
+
+    res.status(200).send(token);
   }
 }
