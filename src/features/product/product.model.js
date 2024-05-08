@@ -1,3 +1,5 @@
+import UserModel from '../user/user.model.js';
+
 // Define product model and Export as default
 export default class ProductModel {
   // Initialize idCounter varialbe to track product ids
@@ -71,6 +73,42 @@ export default class ProductModel {
         (!category || p.category == category)
       );
     });
+  }
+  // Rate product
+  static rate(userId, productId, rating) {
+    // Check if the user exist
+    const isUserExist = UserModel.isExists(userId);
+
+    // If user does not exist, return error
+    if (!isUserExist) {
+      return { error: 'User does not exist' };
+    }
+
+    // Find target product index
+    const productIndex = products.findIndex((p) => p.id == productId);
+
+    // If product does not exist, return error
+    if (productIndex == -1) {
+      return { error: 'Product does not exist' };
+    }
+
+    // If the product does not have a ratings array, create one
+    if (!products[productIndex].ratings) {
+      products[productIndex].ratings = [];
+    }
+
+    // Find the index of existing rating for the user in the product's ratings array
+    const existingRatingIndex = products[productIndex].ratings.findIndex((r) => r.userId == userId);
+
+    // If the user has already rated the product, update the existing rating
+    if (existingRatingIndex >= 0) {
+      products[productIndex].ratings[existingRatingIndex].rating = rating;
+    } else {
+      // If the user has not rated the product yet, add a new rating entry
+      products[productIndex].ratings.push({ userId, rating });
+    }
+
+    return {success: 'Rating has been updated successfully!'}
   }
 }
 

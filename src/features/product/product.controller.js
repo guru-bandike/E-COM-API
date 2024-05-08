@@ -95,9 +95,21 @@ export default class ProductController {
     // Create response object
     const response = {
       message: 'The filteration of product has been successfully completed!',
-      filteredProducts
+      filteredProducts,
     };
 
     res.status(200).send(response); // Send the response to the client
+  }
+
+  rateProduct(req, res) {
+    const { userId, productId, rating } = req.query;
+
+    const result = ProductModel.rate(userId, productId, rating);
+
+    if(result.error) {
+      res.status(400).send(result);
+    } else {
+      res.status(200).send(result);
+    }
   }
 }
