@@ -1,7 +1,12 @@
 // Define User Model and Export as default
 export default class UserModel {
+  
+  // Initialize idCounter varialbe to track user ids
+  static idCounter = 0;
+
   // Constructor for creating user instance
   constructor(name, email, password, role) {
+    this.id = ++UserModel.idCounter;
     this.name = name;
     this.email = email;
     this.password = password;
@@ -26,6 +31,11 @@ export default class UserModel {
   static get(email) {
     const foundUser = users.find((u) => u.email == email); // Find specified user
     return foundUser; // Return found user
+  }
+
+  // Method to check whether user exists
+  static isExists(id) {
+    return users.some((u) => u.id == id);
   }
 }
 
