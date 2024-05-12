@@ -14,6 +14,9 @@ const authUser = (req, res, next) => {
     const secretKey = '2EA9EFB2A59DA773AEB58A8CA52A7';
     // Verify token using JWT
     const payload = jwt.verify(token, secretKey);
+
+    // Attach user id to incoming request body for further usage
+    req.userId = payload.userId;
   } catch (err) {
     // Handle token expairation error
     if (err.name == 'TokenExpiredError') {

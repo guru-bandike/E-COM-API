@@ -70,7 +70,7 @@ export default class ProductController {
 
     res.status(200).send(response); // Send the response to the client
   }
-
+  // Method to delet existing product
   deleteProduct(req, res) {
     const id = req.params.id; // Extract product id from request parameters
 
@@ -101,14 +101,18 @@ export default class ProductController {
     res.status(200).send(response); // Send the response to the client
   }
 
+  // Method to rate existing product
   rateProduct(req, res) {
-    const { userId, productId, rating } = req.query;
+    const { userId, productId, rating } = req.query; // Extract requst details from request body
 
+    // Rate product using Product Model
     const result = ProductModel.rate(userId, productId, rating);
 
-    if(result.error) {
+    // Check result - if errors found then send error response
+    if (result.error) {
       res.status(400).send(result);
     } else {
+      // If no errors found then send success response
       res.status(200).send(result);
     }
   }

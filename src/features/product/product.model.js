@@ -110,10 +110,15 @@ export default class ProductModel {
 
     return {success: 'Rating has been updated successfully!'}
   }
+
+  // Method to check product existence
+  static isExists(id) {
+    return products.some((p) => p.id == id);
+  }
 }
 
 // Existing products
-var products = [
+let products = [
   new ProductModel(
     'smartphone',
     'high-performance smartphone with advanced features.',
