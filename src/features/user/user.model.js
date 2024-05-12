@@ -42,5 +42,6 @@ export default class UserModel {
 // Existing users
 let users = [
   new UserModel('seller name', 'seller@ecom.com', 'seller password', 'seller'),
-  new UserModel('customer name', 'customer@gmail.com', 'customer password', 'customer'),
+  new UserModel('customer1 name', 'customer1@gmail.com', 'customer1 password', 'customer'),
+  new UserModel('customer2 name', 'customer2@gmail.com', 'customer2 password', 'customer'),
 ];

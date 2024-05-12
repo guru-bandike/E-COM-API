@@ -24,11 +24,11 @@ export default class UserController {
     const foundUser = UserModel.signIn(email, password);
 
     if (!foundUser) {
-      return res.status(400).send('Invalid User Credentials!');
+      return res.status(401).send('Invalid User Credentials!');
     }
 
     const token = generateToken(foundUser);
 
-    res.status(200).send(token);
+    res.status(201).send(token);
   }
 }
