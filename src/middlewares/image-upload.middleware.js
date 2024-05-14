@@ -13,5 +13,14 @@ const storageConfig = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if(file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    req.isFileRejected = true;
+    cb(null, false);
+  }
+}
+
 // Create Multer instance with storage cofiguration and Export as default
-export const uploadFile = multer({ storage: storageConfig });
+export const uploadImage = multer({ storage: storageConfig, fileFilter });

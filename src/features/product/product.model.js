@@ -1,29 +1,30 @@
-import UserModel from '../user/user.model.js';
-
 // Define product model and Export as default
 export default class ProductModel {
   // Initialize idCounter varialbe to track product ids
   static idCounter = 0;
 
   // Constructor to create ProductModel instances
-  constructor(name, desc, price, imageUrl, category, sizes) {
+  constructor(name, desc, price, imageUrl, category) {
     this.id = ++ProductModel.idCounter;
     this.name = name;
     this.desc = desc;
     this.price = price;
     this.imageUrl = imageUrl;
     this.category = category;
-    this.sizes = sizes;
   }
 
   // Get all products
   static getAll() {
-    return products; // Return all existing products
+    return { success: true, AllProducts: products }; // Return all existing products
   }
 
   // Get product by ID
   static get(id) {
-    return products.find((p) => p.id == id); // Return specified product
+    const targetProduct = products.find((p) => p.id == id); // Find target product
+    // If target product found, return success message with found product
+    if (targetProduct) return { success: true, msg: 'Requested product successfully found', product: targetProduct };
+    // Else return failure message
+    else return { success: false, msg: 'Requested product does not exist' };
   }
 
   // Add new product
@@ -34,33 +35,45 @@ export default class ProductModel {
       newProductObj.desc,
       newProductObj.price,
       newProductObj.imageUrl,
-      newProductObj.category,
-      newProductObj.sizes
+      newProductObj.category
     );
 
     products.push(newProduct); // Add to the product array
 
-    return newProduct; // Return newly created product
+    // Return success message with newly created product
+    return { success: true, msg: 'Product has been successfully Created', createdProduct: newProduct };
   }
 
   // Update existing product
   static update(updatedProduct) {
     const targetIndex = products.findIndex((p) => p.id == updatedProduct.id); // Get target product index
     products[targetIndex] = updatedProduct; // Update specified product
-    return products[targetIndex]; // Return updated product
+    // Return success message with updated product
+    return { success: true, msg: 'Product has been successfully updated', updatedProduct };
   }
 
   // Delete existing product
   static delete(id) {
     const targetIndex = products.findIndex((p) => p.id == id); // Find target product index
+
+    // If requested product doesn't exists, return failure message
+    if (targetIndex == -1) {
+      return {
+        success: false,
+        msg: 'Invalid product ID',
+      };
+    }
+
     const deletedProductArray = products.splice(targetIndex, 1); // Delete and get target product in an array
     const deletedProduct = deletedProductArray[0]; // Extract deleted product from array
-    return deletedProduct; // Return deleted product
+
+    // Return seccess message with deleted product
+    return { success: true, msg: 'The product has been successfully deleted!', deletedProduct };
   }
   // Filter products
   static filter(name, minPrice, maxPrice, category) {
-    // Filter and return products with specified criteria
-    return products.filter((p) => {
+    // Filter products with specified criteria
+    const filteredProducts = products.filter((p) => {
       // Check if the product matches the filtering criteria
       return (
         // Check if product name is equal to name if specified or ignore otherwise
@@ -73,23 +86,17 @@ export default class ProductModel {
         (!category || p.category == category)
       );
     });
+
+    return { success: true, msg: 'Filteratoin has been successfully completed', filteredProducts };
   }
   // Rate product
   static rate(userId, productId, rating) {
-    // Check if the user exist
-    const isUserExist = UserModel.isExists(userId);
-
-    // If user does not exist, return error
-    if (!isUserExist) {
-      return { error: 'User does not exist' };
-    }
-
     // Find target product index
     const productIndex = products.findIndex((p) => p.id == productId);
 
-    // If product does not exist, return error
+    // If product does not exist, return failure message
     if (productIndex == -1) {
-      return { error: 'Product does not exist' };
+      return { success: false, msg: 'Product does not exist' };
     }
 
     // If the product does not have a ratings array, create one
@@ -108,7 +115,7 @@ export default class ProductModel {
       products[productIndex].ratings.push({ userId, rating });
     }
 
-    return {success: 'Rating has been updated successfully!'}
+    return { success: true, msg: 'Rating has been updated successfully!', rating };
   }
 
   // Method to check product existence
@@ -124,40 +131,35 @@ let products = [
     'high-performance smartphone with advanced features.',
     699.99,
     'https://example.com/images/smartphone.jpg',
-    'electronics',
-    ['64gb', '128gb']
+    'electronics'
   ),
   new ProductModel(
     'laptop',
     'powerful laptop for work and entertainment.',
     1299.99,
     'https://example.com/images/laptop.jpg',
-    'electronics',
-    ['13-inch', '15-inch']
+    'electronics'
   ),
   new ProductModel(
     't-shirt',
     'casual cotton t-shirt for everyday wear.',
     19.99,
     'https://example.com/images/t-shirt.jpg',
-    'clothing',
-    ['s', 'm', 'l', 'xl']
+    'clothing'
   ),
   new ProductModel(
     'dress shirt',
     'formal dress shirt for professional occasions.',
     39.99,
     'https://example.com/images/dress-shirt.jpg',
-    'clothing',
-    ['m', 'l', 'xl']
+    'clothing'
   ),
   new ProductModel(
     'running shoes',
     'lightweight running shoes for fitness enthusiasts.',
     79.99,
     'https://example.com/images/running-shoes.jpg',
-    'shoes',
-    ['7', '8', '9', '10']
+    'shoes'
   ),
   new ProductModel(
     'bluetooth speaker',
@@ -171,8 +173,7 @@ let products = [
     'classic denim jeans for a timeless look.',
     29.99,
     'https://example.com/images/jeans.jpg',
-    'clothing',
-    ['30w x 32l', '32w x 32l', '34w x 32l']
+    'clothing'
   ),
   new ProductModel(
     'sunglasses',
@@ -207,8 +208,7 @@ let products = [
     'cool graphic print t-shirt for a trendy look.',
     24.99,
     'https://example.com/images/graphic-t-shirt.jpg',
-    'clothing',
-    ['s', 'm', 'l', 'xl']
+    'clothing'
   ),
   new ProductModel(
     'gaming mouse',
@@ -250,8 +250,7 @@ let products = [
     'classic denim jacket for casual style.',
     49.99,
     'https://example.com/images/denim-jacket.jpg',
-    'clothing',
-    ['m', 'l', 'xl']
+    'clothing'
   ),
   new ProductModel(
     'smartwatch',
@@ -265,8 +264,7 @@ let products = [
     'comfortable sneakers for everyday wear.',
     69.99,
     'https://example.com/images/sneakers.jpg',
-    'shoes',
-    ['7', '8', '9', '10']
+    'shoes'
   ),
   new ProductModel(
     'coffee maker',
@@ -287,8 +285,7 @@ let products = [
     'fashionable printed dress for special occasions.',
     69.99,
     'https://example.com/images/printed-dress.jpg',
-    'clothing',
-    ['s', 'm', 'l']
+    'clothing'
   ),
   new ProductModel(
     'wireless earbuds',
@@ -309,8 +306,7 @@ let products = [
     'genuine leather belt for a stylish look.',
     29.99,
     'https://example.com/images/leather-belt.jpg',
-    'accessories',
-    ['32', '34', '36']
+    'accessories'
   ),
   new ProductModel(
     'yoga mat',
@@ -338,7 +334,6 @@ let products = [
     'warm winter jacket with insulation for cold weather.',
     89.99,
     'https://example.com/images/winter-jacket.jpg',
-    'clothing',
-    ['m', 'l', 'xl']
+    'clothing'
   ),
 ];
