@@ -4,22 +4,25 @@ import ProductModel from './product.model.js';
 export default class ProductController {
   // Method to serve all existing products
   getAllProducts(req, res) {
-    const allProducts = ProductModel.getAll(); // Get all product from product module
-    res.status(200).send(allProducts); // Serve all existing product
+    const result = ProductModel.getAll(); // Get all product using product module
+    res.status(200).send(result); // Serve all existing product
   }
 
   // Method to serve only one specified product
   getProduct(req, res) {
     const productId = req.params.id; // Extract product id from request parameters
-    const foundProduct = ProductModel.get(productId); // Get product from product module
+    const result = ProductModel.get(productId); // Get product using product module
 
-    res.status(200).send(foundProduct); // Serve requested product
+    // If product found, send success message with found product
+    if(result.success) res.status(200).send(result);
+    // Else, send failure message
+    else res.status(400).send(result);
   }
 
   // Method to add new product
   addProduct(req, res) {
     // Extract product properties from request body
-    const { name, desc, price, category, sizes } = req.body;
+    const { name, desc, price, category } = req.body;
     const imageUrl = req.file.path; // Extract image path
 
     // Create requested product object with propriate data format
@@ -29,23 +32,16 @@ export default class ProductController {
       price: parseFloat(price),
       imageUrl,
       category: category.toLowerCase(),
-      sizes: sizes.split(','),
     };
 
-    const addedProduct = ProductModel.add(newProductObj); // Add new product using product model
+    const result = ProductModel.add(newProductObj); // Add new product using product model
 
-    // Create response object
-    const response = {
-      message: 'The resource has been successfully added!',
-      addedProduct,
-    };
-
-    res.status(201).send(response); // Send the response to the client
+    res.status(201).send(result); // Send success message with newly created product
   }
 
   // Method to update existing product
   updateProduct(req, res) {
-    const { name, desc, price, category, sizes } = req.body; // Extract product properties from request body
+    const { name, desc, price, category } = req.body; // Extract product properties from request body
     const id = req.params.id; // Extract product id from request parameters
     const imageUrl = req.file.path; // Extract image path
 
@@ -57,32 +53,22 @@ export default class ProductController {
       price: parseFloat(price),
       imageUrl,
       category: category.toLowerCase(),
-      sizes: sizes.split(','),
     };
 
-    const updatedProduct = ProductModel.update(updateProductObj); // Update existing product using product model
+    const result = ProductModel.update(updateProductObj); // Update existing product using product model
 
-    // Create response object
-    const response = {
-      message: 'The resource has been successfully updated!',
-      updatedProduct,
-    };
-
-    res.status(200).send(response); // Send the response to the client
+    res.status(200).send(result); // Send success message with updated product
   }
   // Method to delet existing product
   deleteProduct(req, res) {
     const id = req.params.id; // Extract product id from request parameters
 
-    const deletedProduct = ProductModel.delete(id); // Delete requested product using product model
+    const result = ProductModel.delete(id); // Delete requested product using product model
 
-    // Create response object
-    const response = {
-      message: 'The resource has been successfully deleted!',
-      deletedProduct,
-    };
-
-    res.status(200).send(response); // Send the response to the client
+    // If successfully deleted, send result with OK(200) status code
+    if (result.success) res.status(200).send(result);
+    // Otherwise, send result with Bad Request(400) status code
+    else res.status(400).send(result);
   }
 
   // Method to filter and serve products based on user filter criterias
@@ -90,30 +76,22 @@ export default class ProductController {
     const { name, minPrice, maxPrice, category } = req.query; // Extract all filter criterias from request
 
     // Get all filtered product using product model
-    const filteredProducts = ProductModel.filter(name, minPrice, maxPrice, category);
+    const result = ProductModel.filter(name, minPrice, maxPrice, category);
 
-    // Create response object
-    const response = {
-      message: 'The filteration of product has been successfully completed!',
-      filteredProducts,
-    };
-
-    res.status(200).send(response); // Send the response to the client
+    res.status(200).send(result); // Send success message with filtered products
   }
 
   // Method to rate existing product
   rateProduct(req, res) {
-    const { userId, productId, rating } = req.query; // Extract requst details from request body
+    const userId = req.userId; // Extract user ID from request
+    const { productId, rating } = req.body; // Extract requst details from request body
 
     // Rate product using Product Model
     const result = ProductModel.rate(userId, productId, rating);
 
-    // Check result - if errors found then send error response
-    if (result.error) {
-      res.status(400).send(result);
-    } else {
-      // If no errors found then send success response
-      res.status(200).send(result);
-    }
+    // If successfully updated rating, send result with OK(200) status code
+    if (result.success) res.status(201).send(result);
+    // Otherwise, send result with Bad Request(400) status code
+    else res.status(400).send(result);
   }
 }
