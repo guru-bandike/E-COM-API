@@ -12,6 +12,11 @@ const app = express();
 
 app.use(express.json()); // Parse incoming JSON bodies
 
+// Default route
+app.get('/', (req, res) => {
+  res.send('Welcome to E-Commerce API');
+});
+
 // Mount the userRouter for handling user related routes
 app.use('/api/user/', userRouter);
 // Mount the productRouter for handling product related routes
@@ -19,9 +24,9 @@ app.use('/api/products/', authUser, productRouter);
 // Mount the cartRouter for handling cart related routes
 app.use('/api/cart/',authUser, cartRouter)
 
-app.get('/', (req, res) => {
-  res.send('Welcome to E-Commerce API');
-});
-
+// Handle undefined APIs
+app.use((req, res) => {
+  res.status(404).send('API not found!');
+}) 
 // Export Express server instance as default
 export default app;
