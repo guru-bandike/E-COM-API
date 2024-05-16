@@ -1,0 +1,387 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-Commerce API",
+    "description": "API documentation for an e-commerce application",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5100"
+    }
+  ],
+  "paths": {
+    "/api/user/signup": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["User"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User signed up successfully"
+          },
+          "400": {
+            "description": "Invalid user details!"
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "summary": "Login an existing user",
+        "tags": ["User"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          },
+          "401": {
+            "description": "Unauthorized!, invalid credentials"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "summary": "Get all products",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "responses": {
+          "200": {
+            "description": "All existing products"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new product",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product added successfully"
+          },
+          "400": {
+            "description": "Invalid product details!"
+          }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "summary": "Get one products",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "ID of the product"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested product successfully found"
+          },
+          "404": {
+            "description": "Requested product does not exist!"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update existing product",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the product"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product has been successfully updated"
+          },
+          "400": {
+            "description": "Invalid product details!"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing product",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "ID of the product"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The product has been successfully deleted"
+          },
+          "400": {
+            "description": "Invalid product ID!"
+          }
+        }
+      }
+    },
+    "/api/products/filter": {
+      "get": {
+        "summary": "Filter and get products",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "minPrice",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "maxPrice",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filteratoin has been successfully completed"
+          }
+        }
+      }
+    },
+    "/api/products/rate": {
+      "post": {
+        "summary": "Rate an existing product",
+        "tags": ["Product"],
+        "security": [{ "JWT": {} }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Rating has been updated successfully"
+          },
+          "400": {
+            "description": "Invalid product ID!"
+          }
+        }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "summary": "Get all cart items",
+        "tags": ["cart"],
+        "security": [{ "JWT": {} }],
+        "responses": {
+          "200": {
+            "description": "All existing products"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add product to cart",
+        "tags": ["cart"],
+        "security": [{ "JWT": {} }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item has been successfully added to the cart"
+          },
+          "200": {
+            "description": "Cart item quantity has been updated successfully, as the item already exists in user cart!"
+          },
+          "400": {
+            "description": "Request validation failed!"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing item from cart",
+        "tags": ["cart"],
+        "security": [{ "JWT": {} }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cart item has been successfully removed (Or) Cart item quantity has been successfully reduced, as the quantity after subtracting the requested quantity was not zero!"
+          },
+          "400": {
+            "description": "Request validation failed!"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "JWT": {
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey"
+      }
+    },
+    "schemas": {
+      "UserSignup": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Guru Bandike"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "StrongPassword@1"
+          },
+          "role": {
+            "type": "string",
+            "example": "customer"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "customer1@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "@Customer1 Password"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "image": {
+            "type": "file",
+            "format": "binary"
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      },
+      "RateProductRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "rating": {
+            "type": "integer"
+          }
+        }
+      },
+      "CartRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -11,12 +11,13 @@ export default class ProductController {
   // Method to serve only one specified product
   getProduct(req, res) {
     const productId = req.params.id; // Extract product id from request parameters
+    console.log(req.params.id);
     const result = ProductModel.get(productId); // Get product using product module
 
     // If product found, send success message with found product
     if(result.success) res.status(200).send(result);
     // Else, send failure message
-    else res.status(400).send(result);
+    else res.status(404).send(result);
   }
 
   // Method to add new product
