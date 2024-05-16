@@ -5,15 +5,25 @@ export default class CartModel {
     // Find the index of the existing cart item for the given user and product
     const existingCartItemIndex = cartItems.findIndex((c) => c.userId == userId && c.productId == productId);
 
-    // If the cart item doesn't exist, create new one and add to cart items
+    // If the cart item doesn't exist, create new one and add to cart
     if (existingCartItemIndex == -1) {
       const newCartItem = new CartItem(userId, productId, quantity);
       cartItems.push(newCartItem);
-      return newCartItem;
+      return {
+        success: true,
+        doneOperation: 'create',
+        msg: 'Item has been successfully added to cart',
+        newCartItem,
+      };
     } else {
       // If cart item exists, update the quantity
       cartItems[existingCartItemIndex].quatity += quantity;
-      return cartItems[existingCartItemIndex];
+      return {
+        success: true,
+        doneOperation: 'update',
+        msg: 'Cart item quantity has been updated successfully, as the item already exists in user cart!',
+        updatedItem: cartItems[existingCartItemIndex],
+      };
     }
   }
 
@@ -44,7 +54,7 @@ export default class CartModel {
       // Otherwise, just return a success message with current cart item quantity
       return {
         success: true,
-        msg: 'Cart item quantity has been successfully reduced',
+        msg: 'Cart item quantity has been successfully reduced, as the quantity after subtracting the requested quantity was not zero!',
         cartItemCurrentQuantity: cartItems[existingCartItemIndex].quatity,
       };
     }

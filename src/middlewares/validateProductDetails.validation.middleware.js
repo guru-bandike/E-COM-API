@@ -24,7 +24,7 @@ const validateProductDetails = async (req, res, next) => {
       }
       // If the product image is not uploaded, throw a validatoin error
       if (!req.file) {
-        throw new Error('Product image is required');
+        throw new Error('Product image file is required');
       }
       // If file uploaded, Continue without an error
       return true;
@@ -61,7 +61,7 @@ const validateProductDetails = async (req, res, next) => {
     // Send a failure response with validation error messages
     res
       .status(400)
-      .send({ success: false, msg: 'Validation failed', validationErrors: validationErrors.array().map((e) => e.msg) });
+      .send({ success: false, msg: 'Invalid product details!', validationErrors: validationErrors.array().map((e) => e.msg) });
   }
 };
 

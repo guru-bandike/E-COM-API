@@ -1,6 +1,5 @@
 // Define User Model and Export as default
 export default class UserModel {
-  
   // Initialize idCounter varialbe to track user ids
   static idCounter = 0;
 
@@ -17,14 +16,20 @@ export default class UserModel {
   static signUp(name, email, password, role) {
     const newUser = new UserModel(name, email, password, role); // Create new user
     users.push(newUser); // Add new user to the existing users array
-    return newUser; // Return newly created user
+    
+    // Return success message with newly created user
+    return { success: true, msg: 'User signed up successfully', user: newUser };
   }
 
   // Method to authenticate user
-  static signIn(email, password) {
+  static login(email, password) {
     // Find requested user
     const foundUser = users.find((u) => u.email == email && u.password == password);
-    return foundUser; // Return found user
+    
+    // If user found, Return success message with found user
+    if (foundUser) return { success: true, msg: 'User logged in successfully', foundUser };
+    // Otherwise, return failure message
+    else return { success: false, msg: 'Unauthorized!, invalid credentials' };
   }
 
   // Method to return specified user
@@ -41,7 +46,8 @@ export default class UserModel {
 
 // Existing users
 let users = [
-  new UserModel('seller name', 'seller@ecom.com', 'seller password', 'seller'),
-  new UserModel('customer1 name', 'customer1@gmail.com', 'customer1 password', 'customer'),
-  new UserModel('customer2 name', 'customer2@gmail.com', 'customer2 password', 'customer'),
+  new UserModel('seller1 name', 'seller1@ecom.com', '@Seller1 Password', 'seller'),
+  new UserModel('seller2 name', 'seller2@ecom.com', '@Seller2 Password', 'seller'),
+  new UserModel('customer1 name', 'customer1@gmail.com', '@Customer1 Password', 'customer'),
+  new UserModel('customer2 name', 'customer2@gmail.com', '@Customer2 Password', 'customer'),
 ];

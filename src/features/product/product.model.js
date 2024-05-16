@@ -15,7 +15,7 @@ export default class ProductModel {
 
   // Get all products
   static getAll() {
-    return { success: true, AllProducts: products }; // Return all existing products
+    return { success: true, msg: "All existing products", AllProducts: products }; // Return all existing products
   }
 
   // Get product by ID
@@ -24,7 +24,7 @@ export default class ProductModel {
     // If target product found, return success message with found product
     if (targetProduct) return { success: true, msg: 'Requested product successfully found', product: targetProduct };
     // Else return failure message
-    else return { success: false, msg: 'Requested product does not exist' };
+    else return { success: false, msg: 'Requested product does not exist!' };
   }
 
   // Add new product
@@ -60,7 +60,7 @@ export default class ProductModel {
     if (targetIndex == -1) {
       return {
         success: false,
-        msg: 'Invalid product ID',
+        msg: 'Invalid product ID!',
       };
     }
 
@@ -68,7 +68,7 @@ export default class ProductModel {
     const deletedProduct = deletedProductArray[0]; // Extract deleted product from array
 
     // Return seccess message with deleted product
-    return { success: true, msg: 'The product has been successfully deleted!', deletedProduct };
+    return { success: true, msg: 'The product has been successfully deleted', deletedProduct };
   }
   // Filter products
   static filter(name, minPrice, maxPrice, category) {
@@ -96,7 +96,7 @@ export default class ProductModel {
 
     // If product does not exist, return failure message
     if (productIndex == -1) {
-      return { success: false, msg: 'Product does not exist' };
+      return { success: false, msg: 'Invalid product ID!' };
     }
 
     // If the product does not have a ratings array, create one
@@ -115,7 +115,7 @@ export default class ProductModel {
       products[productIndex].ratings.push({ userId, rating });
     }
 
-    return { success: true, msg: 'Rating has been updated successfully!', rating };
+    return { success: true, msg: 'Rating has been updated successfully', rating };
   }
 
   // Method to check product existence

@@ -7,8 +7,20 @@ export default class CartController {
     const userId = req.userId; // Extract user ID from request
     const { productId, quantity } = req.body; // Extract product ID and quantity from request body
 
-    const addedItem = CartModel.addItem(userId, productId, quantity); // Add item using Cart model
-    return res.status(201).send(addedItem);
+    const result = CartModel.addItem(userId, productId, parseInt(quantity)); // Add item using Cart model
+
+    // If model is unable to add or update cart item, send failure response
+    if (!result.success) {
+      return res.status(500).send(result);
+    }
+
+    // If model created a new cart item and added to the user cart, send result with Created(201) status code
+    if (result.doneOperation == 'create') {
+      res.status(201).send(result);
+    } else {
+      // If the model updated existing cart item, send result with OK(200) status code
+      res.status(200).send(result);
+    }
   }
 
   // Method to remove cart item or reduce cart item quantity
@@ -16,7 +28,7 @@ export default class CartController {
     const userId = req.userId; // Extract user ID from request
     const { productId, quantity } = req.body; // Extract product ID and quantity from request body
 
-    const result = CartModel.removeItem(userId, productId, quantity); // Remove item using Cart model
+    const result = CartModel.removeItem(userId, productId, parseInt(quantity)); // Remove item using Cart model
 
     // If successfully removed, send result with OK(200) status code
     if (result.success) return res.status(200).send(result);

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 const authUser = (req, res, next) => {
   // Extract token
   const token = req.headers['authorization'];
+  console.log(req.headers);
 
   // If token not found, send error response
   if (!token) {
