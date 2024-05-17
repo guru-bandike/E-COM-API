@@ -11,7 +11,6 @@ export default class ProductController {
   // Method to serve only one specified product
   getProduct(req, res) {
     const productId = req.params.id; // Extract product id from request parameters
-    console.log(req.params.id);
     const result = ProductModel.get(productId); // Get product using product module
 
     // If product found, send success message with found product
