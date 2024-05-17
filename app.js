@@ -7,6 +7,7 @@ import swagger from 'swagger-ui-express';
 import productRouter from './src/features/product/product.routes.js';
 import userRouter from './src/features/user/user.routes.js';
 import cartRouter from './src/features/cart/cart.routes.js';
+import welcomeUser from './src/middlewares/welcomeUser.middleware.js'
 import authUser from './src/middlewares/authUser.middleware.js';
 import requestLogger from './src/middlewares/logger.middleware.js';
 import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware.js';
@@ -20,9 +21,7 @@ app.use(express.json()); // Parse incoming JSON bodies
 app.use(requestLogger); // Log every incoming request
 
 // Default route
-app.get('/', (req, res) => {
-  res.send('Welcome to E-Commerce API');
-});
+app.get('/', welcomeUser);
 
 app.use('/api-docs', swagger.serve, swagger.setup(await getApiDoc()));
 // Mount the userRouter for handling user related routes
