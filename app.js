@@ -8,6 +8,7 @@ import productRouter from './src/features/product/product.routes.js';
 import userRouter from './src/features/user/user.routes.js';
 import cartRouter from './src/features/cart/cart.routes.js';
 import authUser from './src/middlewares/authUser.middleware.js';
+import requestLogger from './src/middlewares/logger.middleware.js';
 import getApiDoc from './src/helpers/getApiDoc.helper.js';
 
 // Create Express server instance
@@ -15,6 +16,7 @@ const app = express();
 
 app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 app.use(express.json()); // Parse incoming JSON bodies
+app.use(requestLogger); // Log every incoming request
 
 // Default route
 app.get('/', (req, res) => {
@@ -29,7 +31,7 @@ app.use('/api/products/', authUser, productRouter);
 // Mount the cartRouter for handling cart related routes
 app.use('/api/cart/', authUser, cartRouter);
 
-// Handle undefined APIs
+// Handle invalid routes
 app.use((req, res) => {
   res.status(404).send('API not found!, Please check out our documentaion at `http://localhost:5100/api-docs/`');
 });
