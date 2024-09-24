@@ -16,7 +16,7 @@ export default class UserModel {
   static signUp(name, email, password, role) {
     const newUser = new UserModel(name, email, password, role); // Create new user
     users.push(newUser); // Add new user to the existing users array
-    
+
     // Return success message with newly created user
     return { success: true, msg: 'User signed up successfully', user: newUser };
   }
@@ -25,9 +25,10 @@ export default class UserModel {
   static login(email, password) {
     // Find requested user
     const foundUser = users.find((u) => u.email == email && u.password == password);
-    
+
     // If user found, Return success message with found user
-    if (foundUser) return { success: true, msg: 'User logged in successfully', foundUser };
+    if (foundUser)
+      return { success: true, msg: 'User logged in successfully', foundUserId: foundUser.id };
     // Otherwise, return failure message
     else return { success: false, msg: 'Unauthorized!, invalid credentials' };
   }
