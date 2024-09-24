@@ -9,18 +9,17 @@ const storageConfig = multer.diskStorage({
   // Set file name for uploaded files
   filename: (req, file, cb) => {
     cb(null, new Date().toISOString().replace(/:/g, '_') + file.originalname);
-
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  if(file.mimetype.startsWith('image/')) {
+  if (file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
     req.isFileRejected = true;
     cb(null, false);
   }
-}
+};
 
-// Create Multer instance with storage cofiguration and Export as default
+// Create Multer instance with storage cofiguration and Export
 export const uploadImage = multer({ storage: storageConfig, fileFilter });

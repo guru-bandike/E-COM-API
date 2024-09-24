@@ -14,7 +14,7 @@ export default class ProductController {
     const result = ProductModel.get(productId); // Get product using product module
 
     // If product found, send success message with found product
-    if(result.success) res.status(200).send(result);
+    if (result.success) res.status(200).send(result);
     // Else, send failure message
     else res.status(404).send(result);
   }
@@ -59,7 +59,7 @@ export default class ProductController {
 
     res.status(200).send(result); // Send success message with updated product
   }
-  // Method to delet existing product
+  // Method to delete existing product
   deleteProduct(req, res) {
     const id = req.params.id; // Extract product id from request parameters
 

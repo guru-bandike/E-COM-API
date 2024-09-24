@@ -21,8 +21,8 @@ export default class UserController {
     const result = UserModel.login(email, password); // Login using user model
 
     // If user credentials are valid,
-    if(result.success) {
-      const jwtToken = generateToken(result.foundUser); // Generate JWT token
+    if (result.success) {
+      const jwtToken = generateToken(result.foundUserId); // Generate JWT token
       result.JwtToken = jwtToken; // Append JWT token to the result object
 
       // Send result with OK(200) status code
